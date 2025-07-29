@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+{% block title %}Detalles de {{ campaign.name }} - PhishForge Elite{% endblock %}
+{% block content %}
+<div class="card">
+    <h2>Detalles de la Campaña: {{ campaign.name }}</h2>
+    <p><strong>Tipo:</strong> {{ campaign.template_type|capitalize }}</p>
+    <p><strong>Creada en:</strong> {{ campaign.created_at }}</p>
+    <p><strong>Total de Capturas:</strong> {{ data|length }}</p>
+    <a href="{{ url_for('export_data', campaign_id=campaign.id, format='csv') }}" class="btn btn-primary">Exportar a CSV</a>
+    <a href="{{ url_for('export_data', campaign_id=campaign.id, format='json') }}" class="btn btn-secondary">Exportar a JSON</a>
+</div>
+
+<div class="card">
+    <h3>Datos Capturados</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Datos Capturados</th>
+                <th>Dirección IP</th>
+                <th>User Agent</th>
+                <th>Fecha y Hora</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in data %}
+            <tr>
+                <td>{{ item.id }}</td>
+                <td><pre>{{ item.data | tojson(indent=2) }}</pre></td>
+                <td>{{ item.ip_address }}</td>
+                <td>{{ item.user_agent }}</td>
+                <td>{{ item.captured_at }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5" style="text-align: center;">Aún no se han capturado datos para esta campaña.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

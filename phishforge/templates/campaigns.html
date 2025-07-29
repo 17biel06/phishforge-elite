@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+{% block title %}Campañas - PhishForge Elite{% endblock %}
+{% block content %}
+<div class="card">
+    <h2>Crear Nueva Campaña</h2>
+    <form action="{{ url_for('create_campaign') }}" method="post">
+        <div class="form-group">
+            <label for="campaign_name">Nombre de la Campaña</label>
+            <input type="text" id="campaign_name" name="campaign_name" required>
+        </div>
+        <div class="form-group">
+            <label for="url">URL a Clonar</label>
+            <input type="url" id="url" name="url">
+        </div>
+        <div class="form-group">
+            <label for="template">O usar una plantilla predefinida</label>
+            <select id="template" name="template">
+                <option value="">-- Seleccionar Plantilla --</option>
+                {% for t in predefined_templates %}
+                <option value="{{ t }}">{{ t|capitalize }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Crear y Lanzar</button>
+    </form>
+</div>
+
+<div class="card">
+    <h3>Campañas Activas</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Tipo</th>
+                <th>Capturas</th>
+                <th>Creada en</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for campaign in campaigns %}
+            <tr>
+                <td><a href="{{ url_for('campaign_detail', campaign_id=campaign.id) }}">{{ campaign.name }}</a></td>
+                <td>{{ campaign.template_type|capitalize }}</td>
+                <td>{{ campaign.capture_count }}</td>
+                <td>{{ campaign.created_at }}</td>
+                <td>
+                    <a href="{{ url_for('serve_site', campaign_name=campaign.name) }}" target="_blank" class="btn btn-secondary">Vista Previa</a>
+                    <a href="{{ url_for('delete_campaign', campaign_id=campaign.id) }}" class="btn btn-danger">Eliminar</a>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5" style="text-align: center;">No hay campañas activas.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
